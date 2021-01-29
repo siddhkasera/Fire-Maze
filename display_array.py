@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+from sys import exit
 
 # Source: http://programarcadegames.com/index.php?lang=en&chapter=array_backed_grids
 # You may need to install pygame
@@ -51,6 +52,13 @@ def display_array(arr, dim):
                                                   (MARGIN + HEIGHT) * row + MARGIN,
                                                   WIDTH,
                                                   HEIGHT ] )
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    return pygame.quit()
+
+        
+
+        
 
 
     # --- Go ahead and update the screen with what we've drawn.
@@ -59,5 +67,5 @@ def display_array(arr, dim):
     # --- Limit to 60 frames per second
         clock.tick(60)
 
-# Close the window and quit.
-    pygame.quit()
+
+    
