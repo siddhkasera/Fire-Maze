@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 from sys import exit
 
+
 # Source: http://programarcadegames.com/index.php?lang=en&chapter=array_backed_grids
 # You may need to install pygame
 
@@ -12,6 +13,7 @@ def display_array(arr, dim):
     GRAY = (90, 90, 90)
     GREEN = (0, 255, 0)
     RED = (255, 0, 0)
+    MAGENTA = (255, 102, 255)
 
     WIDTH = 20
     HEIGHT = 20
@@ -48,24 +50,20 @@ def display_array(arr, dim):
                     color = GREEN
                 elif arr[row][column] == 'F':
                     color = RED
-                pygame.draw.rect(screen, color, [ (MARGIN + WIDTH) * column + MARGIN,
-                                                  (MARGIN + HEIGHT) * row + MARGIN,
-                                                  WIDTH,
-                                                  HEIGHT ] )
+                elif arr[row][column] == "V":
+                    color = MAGENTA
+                pygame.draw.rect(screen, color, [(MARGIN + WIDTH) * column + MARGIN,
+                                                 (MARGIN + HEIGHT) * row + MARGIN,
+                                                 WIDTH,
+                                                 HEIGHT])
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     return pygame.quit()
 
-        
-
-        
-
-
-    # --- Go ahead and update the screen with what we've drawn.
+        # --- Go ahead and update the screen with what we've drawn.
         pygame.display.flip()
 
-    # --- Limit to 60 frames per second
+        # --- Limit to 60 frames per second
         clock.tick(60)
 
 
-    
