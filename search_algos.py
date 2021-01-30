@@ -1,48 +1,58 @@
 
-class search_algos:
+from collections import deque
 
-    def __init__(self, arr, dim): #the first param in the function will call this instance of the class
-        self.arr = arr
-        self.dim = dim
-        self.queue = [] #for BFS
 
-    def is_valid(self, x, y): #check validity of given X and Y
-        if (x >= self.dim) or (y >= self.dim):
-            return "No"
-        elif (x < 0) or (y < 0):
-            return "No"
-        elif self.arr[x][y] == 'X': #wall found
-            return "No"
-        elif (x == 0) and (y == 0):
-            return "Start"
-        elif (x == self.dim-1) and (y == self.dim-1):
-            return "Finish"
-        else:
-            return "Yes"
-    #use "V" to mark visited
+class Point:
+    def __init__(self, x: int, y: int):
+        self.x = x
+        self.y = y
 
-    def bfs(self, x, y):
-        #direction vectors
-        dx = [-1, 0, 1, 0]
-        dy = [0, 1, 0, -1]
 
-        #push onto queue
-        self.queue.append( [x, y] )
-        while self.queue != []:
-            #as long as queue is filled with something, loop continues
-            current = self.queue.pop()
+def isValid(arr, dim, row, col):
+    if (row < 0) or (col < 0) or (row >= dim) or (col >= dim):
+        return False
+    else:
+        return True
 
-            if self.is_valid(current[0], current[1]) == "Finish":
-                break
-            for i in range(4):
-                nextX = current[0]+dx[i]
-                nextY = current[1]+dy[i]
-                if self.is_valid(nextX, nextY) == "No":
-                    continue
-                else:#bug is somewhere here, I think
-                    self.queue.append( [nextX, nextY] )
-                    if (nextX != self.dim-1) and (nextY != self.dim-1) and (self.is_valid(nextX, nextY) == 'Yes'):
-                        self.arr[nextX][nextY] = 'V'
-                    elif self.is_valid(nextX, nextY) == "Finish":
-                        break
-        return self.arr
+
+dx = [-1, 0, 0, 1]
+dy = [0, -1, 1, 0]
+
+
+def fillInVisited(arr, dim, visited):
+    for i in range(dim):
+        for j in range(dim):
+            if arr[i][j] == '-' and visited[i][j] == True:
+                arr[i][j] = "V"
+    return arr
+
+
+def bfs(arr, dim):
+    src = Point(0, 0)
+    dest = Point(dim-1, dim-1)
+
+    visited = [[False for i in range(dim)] for j in range(dim)]
+    visited[0][0] = True
+
+    queue = deque()  # quicker way to do queue operations
+    queue.append(src)
+
+    while queue:
+
+        pt = queue.popleft()  # pop cell
+
+        if pt.x == dest.x and pt.y == dest.y:
+            return fillInVisited(arr, dim, visited)
+
+        for i in range(4):
+            row = pt.x + dx[i]
+            col = pt.y + dy[i]
+#evaluate next line when row=1 and col=0
+            if isValid(arr, dim, row, col) and arr[row][col] != 'X' and (not visited[row][col]):
+                # if entry is valid, empty, and not visited
+                visited[row][col] = True
+                adjCell = Point(row, col)
+                queue.append(adjCell)
+    # if failure
+    print("BFS failed")
+    return arr
