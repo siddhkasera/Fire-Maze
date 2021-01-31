@@ -7,9 +7,9 @@ class Point:
         self.visited = visited
 
     def isValid(self, x, y, visited):
-        if x < 1 or x > self.dim:
+        if x < 1 or x > self.dim-1:
             return False
-        elif y < 1 or y > self.dim:
+        elif y < 1 or y > self.dim-1:
             return False
         elif visited[x][y] is True:
             return False
