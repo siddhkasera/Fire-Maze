@@ -3,6 +3,8 @@ from generate_array import generate_array
 from bfs_algo import *
 from dfs_algo import *
 
+#Rule of thumb: BFS uses the queue and DFS uses the stack. The code is otherwise the same
+
 dim = input("Enter the dimension of the array, in whole numbers: ")
 p = input("Enter the probability of each element being filled in, from a range of 0 to 1: ")
 arr = generate_array(int(dim), float(p) )
@@ -16,15 +18,18 @@ while True:
         display_array(result, int(dim) )
         break
     elif m == 'DFS' or m =='dfs' or m == 'D' or m == 'd':
-        #enter DFS here
-        pt = Point(0, 0, arr, int(dim), [] )
-        pt.dfs(0, 0)
+        dfs(arr, int(dim) )
         display_array(arr, int(dim) )
         break
     elif m == "All" or m == "all" or m == "ALL":
-        result1 = bfs (arr, int(dim) )
-        display_array(result1, int(dim) )
+        resultB = bfs (arr, int(dim) )
+        display_array(resultB, int(dim) )
+
+        resultD = dfs(arr, int(dim) )
+        display_array(resultD, int(dim) )
+
         break
+
     else:
         print("This is not a valid mode, please try again!")
 

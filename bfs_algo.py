@@ -48,7 +48,7 @@ def bfs(arr, dim):
         pt = current.pt
 
         if pt.x == dest.x and pt.y == dest.y:
-            print("BFS distance: " + str(current.dist) )
+            print("\nBFS distance: " + str(current.dist) )
             return fillInVisited(arr, dim, visited)
 
         for i in range(4):
