@@ -14,6 +14,7 @@ def display_array(arr, dim):
     GREEN = (0, 255, 0)
     RED = (255, 0, 0)
     MAGENTA = (255, 102, 255)
+    BLUE = (0, 0, 255)
 
     WIDTH = 20
     HEIGHT = 20
