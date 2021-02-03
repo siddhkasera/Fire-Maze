@@ -1,8 +1,10 @@
 import heapq
 
-
 # create a prority queue class.
 # create a heuristic function.
+from math import sqrt
+from typing import Any, Union
+
 
 class PriorityQueue:
     def __init__(self):
@@ -16,6 +18,9 @@ class PriorityQueue:
 
     def get(self):
         return heapq.heappop(self.elements)[1]
+
+    def __iter__(self):
+        return self
 
     def __str__(self):
         return str(self.elements)
@@ -41,10 +46,10 @@ def isValid(arr, dim, row, col):
 
 
 def heuristic(a, b):
-    """ Calculates the Manhantan Distance between two co-ordinate points """
+    """ Calculates the Euclidean Distance between two co-ordinate points """
     x1, y1 = a
     x2, y2 = b
-    return abs(x1 - x2) + abs(y1 - y2)
+    return sqrt(abs(x1 - x2) ** 2 + abs(y1 - y2) ** 2)
 
 
 def fillInVisited(arr, dim, visited):
@@ -56,6 +61,7 @@ def fillInVisited(arr, dim, visited):
 
 
 def a_star(arr, dim):
+    # direction array
     dx = [-1, 0, 0, 1]
     dy = [0, -1, 1, 0]
 
@@ -67,26 +73,45 @@ def a_star(arr, dim):
     visited = [[False for i in range(dim)] for j in range(dim)]
     visited[0][0] = True
 
-    pq = PriorityQueue()
-    pq.put(src, 0)
-    g_values = {src: 0}
+    # pq = PriorityQueue()
 
-    while not pq.is_empty():
-        current = pq.get()  # pop the cell coordinates
+    closed_set = set()
+    came_from = {}
+    # pq.put(src, 0)  # first coordinate with priority 0 added in the queue.
+    # g-value: best distance from start to current cell
+    g_values = {src: 0}  #
+    f_values = {}
+    pq = []
+
+    heapq.heappush(pq, (f_values[src], src))
+
+    while pq:
+        current = heapq.heappop(pq)[1]  # pop the cell coordinates
         if current == dest:
-            #print("AStar distance:" + cor.dist)
-            return fillInVisited(arr, dim, visited)
+            # print("AStar distance:" + cor.dist)
+            path = []
+            while current in came_from:
+                path.append(current)  # Gscore[neighbor]
+                current = came_from[current]
+            # return fillInVisited(arr, dim, visited)
+            return path
         for i in range(4):
             row = current[0] + dx[i]
             col = current[1] + dy[i]
             neighbor = (row, col)
-            if isValid(arr, dim, row, col) and arr[row][col] != 'X' and neighbor not in g_values:
-                new_cost = g_values[current] + 1
-                g_values[neighbor] = new_cost
-                f_value = new_cost + heuristic(dest, neighbor)
-                #adj = AStarNode(Point(row, col), cor.dist + 1)
-                visited[row][col] = True
-                pq.put(neighbor, f_value)
+            tent_g_value = g_values[current] + heuristic(current, neighbor)
+            if isValid(arr, dim, row, col) and arr[row][col] != 'X':
+                if neighbor in closed_set and tent_g_value >= g_values.get(neighbor, 0):
+                    continue
+                if tent_g_value < g_values.get(neighbor, 0) or neighbor not in [i[1] for i in pq]:
+                    came_from[neighbor] = current
+                    g_values[neighbor] = tent_g_value
+                    f_values[neighbor] = tent_g_value + heuristic(neighbor, dest)
+                    #visited[row][col] = True
+                    heapq.heappush(pq, (f_values[neighbor], neighbor))
 
+                # adj = AStarNode(Point(row, col), cor.dist + 1)
     print("A-star failed")
     return arr
+# 0.1 -0.3 run the algo on 50 diff mazezs. how many of you were able to find the path divided by total
+# generate 50 mazes with a one probability. total no times you found the path/ total no of times you ran the alfo.
