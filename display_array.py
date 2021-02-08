@@ -49,7 +49,7 @@ def display_array(arr, dim):
                     color = GRAY
                 elif arr[row][column] == 'S':
                     color = GREEN
-                elif arr[row][column] == 'F':
+                elif arr[row][column] == 'G':
                     color = RED
                 elif arr[row][column] == "V":
                     color = MAGENTA

@@ -18,5 +18,5 @@ def generate_array(dim: object = 10, p: object = 0.1) -> object:
         for i in range(len(arr) ):
             arr[i] = random.choices(choices, weights=[1-p, p], k=dim)
         arr[0][0] = 'S'
-        arr[dim-1][dim-1] = 'F'
+        arr[dim-1][dim-1] = 'G'
         return arr
