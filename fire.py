@@ -125,3 +125,41 @@ def strategy1(arr, dim, flammability):
     print("No path from start to goal")
     return False
 
+def strategy2(arr, dim, flammability):
+    #This strategy now considers fire as a wall
+    dx = [-1, 0, 0, 1]
+    dy = [0, -1, 1, 0]
+    src = Point(0, 0)
+    dest = Point(dim - 1, dim - 1)
+
+    visited = [[False for i in range(dim)] for j in range(dim)]
+    visited[0][0] = True
+    stack = []
+    s = StackNode(src, 0)
+    stack.append(s)
+
+    setFire(arr, dim)
+
+    while stack:
+        current = stack.pop(len(stack)-1)
+        pt = current.pt
+        arr = spreadFire(arr, dim, flammability)
+        #I interpreted the directions as "for every step, do spreadFire()"
+        if arr[pt.x][pt.y] == 'F':
+            print("Agent burned before reaching the goal")
+            return False
+        if pt.x == dest.x and pt.y == dest.y:
+            print("Success!")
+            return True
+        for i in range(4):
+            row = pt.x + dx[i]
+            col = pt.y + dy[i]
+            # evaluate next line when row=1 and col=0
+            if isValid(arr, dim, row, col) and arr[row][col] != 'X' and arr[row][col] != 'F' and (not visited[row][col]):
+                # if entry is valid, empty, and not visited
+                visited[row][col] = True
+                adjCell = StackNode(Point(row, col), current.dist+1)
+                stack.append(adjCell)
+
+    print("No path from start to goal")
+    return False
