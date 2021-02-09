@@ -62,18 +62,20 @@ if m == "S" or m =="s" or m == "static":
 elif m == "F" or m == "f" or m == "fire":
     dim = input("Enter the dimension of the array, in whole numbers: ")
     p = input("Enter the probability of each element being filled in, from a range of 0 to 1: ")
-    arr = generate_array(int(dim), float(p))
-    display_array(arr, int(dim))
     while True:
         m = input("Which fire strategy should I use (pick a number 1 to 3), or quit to stop: ")
         if m == "1" or m == "Strategy 1":
             f = input("Enter a flammability value from a range of 0 to 1: ")
+            arr = generate_array(int(dim), float(p))
+            display_array(arr, int(dim))
             t0 = time.time()
             if strategy1(arr, int(dim), float(f)):
                 print(time.time() - t0, "seconds")
 
         elif m == "2" or m == "Strategy 2":
             f = input("Enter a flammability value from a range of 0 to 1: ")
+            arr = generate_array(int(dim), float(p))
+            display_array(arr, int(dim))
             t0 = time.time()
             if strategy2(arr, int(dim), float(f)):
                 print(time.time() - t0, "seconds")
