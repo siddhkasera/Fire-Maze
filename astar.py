@@ -33,7 +33,7 @@ class Point:
 
     # def get_pos(self):
     #    return self.x, self.y
-    def __iter__(self):
+    def __iter__(self): # iteration
         return self
 
     def __next__(self):
@@ -65,7 +65,7 @@ def heuristic(a, b):
     print("values in a and b inside heuristic are:")
     print(a.x, a.y)
     print(b.x, b.y)
-    z = sqrt(a.x - b.x) ** 2 + abs(a.y - b.y) ** 2
+    z = sqrt(abs(a.x - b.x) ** 2) + sqrt(abs((a.y - b.y) ** 2))
     print("H value is")
     print(z)
     return z
@@ -81,6 +81,7 @@ def fillInVisited(arr, dim, visited):
 
 def reconstruct_path(arr, came_from, current):
     while current in came_from:
+        print(came_from)
         current = came_from[current]
         i = current.x
         j = current.y
