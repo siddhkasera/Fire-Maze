@@ -19,8 +19,13 @@ class PriorityQueue:
     def get(self):
         return heapq.heappop(self.elements)[1]
 
-    def __iter__(self):
-        return self
+    # def __iter__(self):
+      #  if self.empty():
+       #    return False
+        #while True:
+         #   if
+
+   # def __next__(self):
 
     def __str__(self):
         return str(self.elements)
@@ -31,14 +36,12 @@ class Point:
         self.x = x
         self.y = y
 
-    # def get_pos(self):
-    #    return self.x, self.y
-    def __iter__(self): # iteration
+    def __iter__(self):  # iteration
         return self
 
-    def __next__(self):
-        for i in Point:
-            return self.__getattribute__(i)
+    # def __next__(self):
+    # for i in Point:
+    # return self.__getattribute__(i)
 
     def __hash__(self):
         return hash((self.x, self.y))
@@ -103,20 +106,22 @@ def a_star(arr, dim):
     came_from = {}
     # pq.put(src, 0)  # first coordinate with priority 0 added in the queue.
     # g-value: best distance from start to current cell
-    g_values = {Point: float("inf") for dim in arr for Point in dim}
-    g_values[src] = 0
-    f_values = {Point: float("inf") for dim in arr for Point in dim}
-    f_values[src] = heuristic(src, dest)
+    # g_values = {Point: float("inf") for dim in arr for Point in dim}
+    g_values = {src: 0}
+    # f_values = {Point: float("inf") for dim in arr for Point in dim}
+    f_values = {src: heuristic(src, dest)}
     print("The f_values:")
     print(f_values)
-    pq = []
-
-    heapq.heappush(pq, (f_values[src], src))
+    # pq = []
+    pq = PriorityQueue()
+    pq.put(src, 0)
+    #heapq.heappush(pq, (f_values[src], src))
     # ___hash___()
     # __eq___()
     # Making python class usable as dictionary key
-    while pq:
-        current = heapq.heappop(pq)[1]  # pop the cell coordinates
+    while not pq.is_empty():
+        # current = heapq.heappop(pq)[1]  # pop the cell coordinates
+        current = pq.get()
         if current.x == dest.x:
             return reconstruct_path(arr, current, came_from)
         for i in range(4):
@@ -125,15 +130,20 @@ def a_star(arr, dim):
             if isValid(arr, dim, row, col) and arr[row][col] != 'X':
                 neighbor = Point(row, col)
                 tent_g_value = g_values[current] + 1
+                print("Tentative G value:")
+                print(tent_g_value)
+                print("G_values neighbour value:")
+                print(g_values.get(neighbor, 0))
                 if neighbor in closed_set and tent_g_value >= g_values.get(neighbor, 0):
                     continue
-                if tent_g_value < g_values.get(neighbor, 0) or neighbor not in [i[1] for i in pq]:
+                if tent_g_value < g_values.get(neighbor, 0) or neighbor not in pq:
                     came_from[neighbor] = current
                     g_values[neighbor] = tent_g_value
                     f_values[neighbor] = tent_g_value + heuristic(neighbor, dest)
-                    heapq.heappush(pq, (f_values[neighbor], neighbor))
-            #if current != src:
-             #   closed_set.add(current)
+                    # heapq.heappush(pq, (f_values[neighbor], neighbor))
+                    pq.put(neighbor, f_values)
+            if current != src:
+               closed_set.add(current)
     print("A-star failed")
     return arr
 # 0.1 -0.3 run the algo on 50 diff mazezs. how many of you were able to find the path divided by total
