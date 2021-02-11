@@ -1,4 +1,4 @@
-import heapq
+from heapq import *
 
 # create a prority queue class.
 # create a heuristic function.
@@ -14,13 +14,18 @@ class PriorityQueue:
         return not self.elements
 
     def put(self, item, priority):
-        heapq.heappush(self.elements, (priority, item))
+        heappush(self.elements, (priority, item))
 
     def get(self):
-        return heapq.heappop(self.elements)[1]
+        return heappop(self.elements)
 
-    def __iter__(self):
-        return self
+    # def __iter__(self):
+      #  if self.empty():
+       #    return False
+        #while True:
+         #   if
+
+   # def __next__(self):
 
     def __str__(self):
         return str(self.elements)
@@ -30,6 +35,19 @@ class Point:
     def __init__(self, x: int, y: int):
         self.x = x
         self.y = y
+
+    def __iter__(self):  # iteration
+        return self
+
+    # def __next__(self):
+    # for i in Point:
+    # return self.__getattribute__(i)
+
+    def __hash__(self):
+        return hash((self.x, self.y))
+
+    def __eq__(self, other):
+        return (self.x, self.y) == (other.x, other.y)
 
 
 class AStarNode:
@@ -47,9 +65,13 @@ def isValid(arr, dim, row, col):
 
 def heuristic(a, b):
     """ Calculates the Euclidean Distance between two co-ordinate points """
-    x1, y1 = a
-    x2, y2 = b
-    return sqrt(abs(x1 - x2) ** 2 + abs(y1 - y2) ** 2)
+    #print("values in a and b inside heuristic are:")
+    #print(a.x, a.y)
+    #print(b.x, b.y)
+    z = sqrt(abs(a.x - b.x) ** 2) + sqrt(abs((a.y - b.y) ** 2))
+    #print("H value is")
+    #print(z)
+    return z
 
 
 def fillInVisited(arr, dim, visited):
@@ -60,57 +82,68 @@ def fillInVisited(arr, dim, visited):
     return arr
 
 
+def reconstruct_path(arr, came_from, current):
+    while current in came_from:
+        print(came_from)
+        current = came_from[current]
+        i = current.x
+        j = current.y
+        arr[i][j] = "V"
+    return arr
+
+
 def a_star(arr, dim):
     # direction array
     dx = [-1, 0, 0, 1]
     dy = [0, -1, 1, 0]
 
-    src = (0, 0)
-    dest = (dim - 1, dim - 1)
     src = Point(0, 0)
     dest = Point(dim - 1, dim - 1)
 
     visited = [[False for i in range(dim)] for j in range(dim)]
     visited[0][0] = True
-
-    # pq = PriorityQueue()
-
     closed_set = set()
     came_from = {}
     # pq.put(src, 0)  # first coordinate with priority 0 added in the queue.
     # g-value: best distance from start to current cell
-    g_values = {src: 0}  #
-    f_values = {src: 0}
-    pq = []
-
-    heapq.heappush(pq, (f_values[src], src) ) #heap should contain points
-
-    while pq:
-        current = heapq.heappop(pq)[1]  # pop the cell coordinates
-        if current == dest:
-            # print("AStar distance:" + cor.dist)
-            path = []
-            while current in came_from:
-                path.append(current)  # Gscore[neighbor]
-                current = came_from[current]
-            # return fillInVisited(arr, dim, visited)
-            return path
+    # g_values = {Point: float("inf") for dim in arr for Point in dim}
+    g_values = {src: 0}
+    # f_values = {Point: float("inf") for dim in arr for Point in dim}
+    f_values = {src: heuristic(src, dest)}
+    #print("The f_values:")
+    #print(f_values)
+    # pq = []
+    pq = PriorityQueue()
+    pq.put(0, src)
+    #heapq.heappush(pq, (f_values[src], src))
+    # ___hash___()
+    # __eq___()
+    # Making python class usable as dictionary key
+    while not pq.is_empty():
+        # current = heapq.heappop(pq)[1]  # pop the cell coordinates
+        current = pq.get() #this returns a tuple
+        if current[0] == dest:
+            return reconstruct_path(arr, current, came_from)
         for i in range(4):
-            row = current[0] + dx[i]
-            col = current[1] + dy[i]
-            neighbor = Point(row, col)
-            tent_g_value = g_values[current] + heuristic(current, neighbor)
+            row = current[0].x + dx[i]
+            col = current[0].y + dy[i]
             if isValid(arr, dim, row, col) and arr[row][col] != 'X':
+                neighbor = Point(row, col)
+                tent_g_value = g_values[current[0] ] + 1
+                #print("Tentative G value:")
+                #print(tent_g_value)
+                #print("G_values neighbour value:")
+                #print(g_values.get(neighbor, 0))
                 if neighbor in closed_set and tent_g_value >= g_values.get(neighbor, 0):
                     continue
-                if tent_g_value < g_values.get(neighbor, 0) or neighbor not in [i[1] for i in pq]:
+                if tent_g_value < g_values.get(neighbor, 0) or not neighbor in pq:
                     came_from[neighbor] = current
                     g_values[neighbor] = tent_g_value
                     f_values[neighbor] = tent_g_value + heuristic(neighbor, dest)
-                    #visited[row][col] = True
-                    heapq.heappush(pq, (f_values[neighbor], neighbor))
-
-                # adj = AStarNode(Point(row, col), cor.dist + 1)
+                    # heapq.heappush(pq, (f_values[neighbor], neighbor))
+                    pq.put(f_values[neighbor], neighbor)
+            if current[0] != src:
+               closed_set.add(current)
     print("A-star failed")
     return arr
 # 0.1 -0.3 run the algo on 50 diff mazezs. how many of you were able to find the path divided by total
