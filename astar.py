@@ -83,6 +83,7 @@ def astar(arr, dim):
         closed_list.append(current)
         pt = current.pt
         if pt.x == dest.x and pt.y == dest.y:
+            print("\nA* distance: " + str(current.dist))
             return reconstruct_path(arr, came_from, current)
 
         neighbor = []

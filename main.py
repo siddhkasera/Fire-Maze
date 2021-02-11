@@ -26,13 +26,13 @@ if m == "S" or m =="s" or m == "static":
             t0 = time.time()
             resultB = bfs(arr, int(dim))
             print(time.time() - t0, "seconds")
-            display_array(resultB, int(dim))
+            #display_array(resultB, int(dim))
 
         elif m == 'DFS' or m == 'dfs' or m == 'D' or m == 'd':
             t0 = time.time()
             resultD = dfs(arr, int(dim))
             print(time.time() - t0, "seconds")
-            display_array(resultD, int(dim))
+            #display_array(resultD, int(dim))
 
         elif m == "All" or m == "all" or m == "ALL":
             t0 = time.time()
@@ -44,14 +44,14 @@ if m == "S" or m =="s" or m == "static":
             print(time.time() - t1, " seconds")
 
             t2 = time.time()
-            resultA = a_star(arr, int(dim))
+            resultA = astar(arr, int(dim))
             print(time.time() - t2, "seconds")
 
         elif m == "Astar" or m == "astar" or m == "A*":
             t0 = time.time()
-            result = a_star(arr, int(dim))
+            resultA = astar(arr, int(dim))
             print(time.time() - t0, "seconds")
-            display_array(result, int(dim))
+            #display_array(resultA, int(dim))
 
         elif m == "exit" or m == "quit" or m == "stop":
             break
