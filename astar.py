@@ -1,34 +1,5 @@
-from heapq import *
-
-# create a prority queue class.
-# create a heuristic function.
+import heapq
 from math import sqrt
-from typing import Any, Union
-
-
-class PriorityQueue:
-    def __init__(self):
-        self.elements = []
-
-    def is_empty(self):
-        return not self.elements
-
-    def put(self, item, priority):
-        heappush(self.elements, (priority, item))
-
-    def get(self):
-        return heappop(self.elements)
-
-    # def __iter__(self):
-      #  if self.empty():
-       #    return False
-        #while True:
-         #   if
-
-   # def __next__(self):
-
-    def __str__(self):
-        return str(self.elements)
 
 
 class Point:
@@ -36,24 +7,28 @@ class Point:
         self.x = x
         self.y = y
 
-    def __iter__(self):  # iteration
-        return self
 
-    # def __next__(self):
-    # for i in Point:
-    # return self.__getattribute__(i)
-
-    def __hash__(self):
-        return hash((self.x, self.y))
-
-    def __eq__(self, other):
-        return (self.x, self.y) == (other.x, other.y)
-
-
-class AStarNode:
+class AstarNode:
     def __init__(self, pt: Point, dist: int):
         self.pt = pt
         self.dist = dist
+        self.g = 0
+        self.h = 0
+        self.f = 0
+
+    # def __eq__(self, other):
+        # return (self.pt.x == other.x) and (self.pt.y == other.y)
+      #  return self.pt == other.pt
+
+    # def __str__(self):
+        # return f'x is {self.pt.x} and y is {self.pt.y}'
+      #  return f'x is {self.pt.x} and y is {self.pt.y}'
+
+    def __lt__(self, other):
+        return self.f < other.f
+
+    def __gt__(self, other):
+        return self.f > other.f
 
 
 def isValid(arr, dim, row, col):
@@ -61,6 +36,16 @@ def isValid(arr, dim, row, col):
         return False
     else:
         return True
+
+
+def reconstruct_path(arr, came_from, current):
+    while current in came_from:
+        print(came_from)
+        current = came_from[current]
+        i = current.x
+        j = current.y
+        arr[i][j] = "V"
+    return arr
 
 
 def heuristic(a, b):
@@ -74,26 +59,7 @@ def heuristic(a, b):
     return z
 
 
-def fillInVisited(arr, dim, visited):
-    for i in range(dim):
-        for j in range(dim):
-            if arr[i][j] == '-' and visited[i][j] == True:
-                arr[i][j] = "V"
-    return arr
-
-
-def reconstruct_path(arr, came_from, current):
-    while current in came_from:
-        print(came_from)
-        current = came_from[current]
-        i = current.x
-        j = current.y
-        arr[i][j] = "V"
-    return arr
-
-
-def a_star(arr, dim):
-    # direction array
+def astar(arr, dim):
     dx = [-1, 0, 0, 1]
     dy = [0, -1, 1, 0]
 
@@ -102,49 +68,45 @@ def a_star(arr, dim):
 
     visited = [[False for i in range(dim)] for j in range(dim)]
     visited[0][0] = True
-    closed_set = set()
+
+    src.g = src.h = src.f = 0
+
+    open_list = []
+    closed_list = []
     came_from = {}
-    # pq.put(src, 0)  # first coordinate with priority 0 added in the queue.
-    # g-value: best distance from start to current cell
-    # g_values = {Point: float("inf") for dim in arr for Point in dim}
-    g_values = {src: 0}
-    # f_values = {Point: float("inf") for dim in arr for Point in dim}
-    f_values = {src: heuristic(src, dest)}
-    #print("The f_values:")
-    #print(f_values)
-    # pq = []
-    pq = PriorityQueue()
-    pq.put(0, src)
-    #heapq.heappush(pq, (f_values[src], src))
-    # ___hash___()
-    # __eq___()
-    # Making python class usable as dictionary key
-    while not pq.is_empty():
-        # current = heapq.heappop(pq)[1]  # pop the cell coordinates
-        current = pq.get() #this returns a tuple
-        if current[0] == dest:
+    s = AstarNode(src, 0)
+    heapq.heapify(open_list)
+    heapq.heappush(open_list, s)
+
+    while len(open_list) > 0:
+        current = heapq.heappop(open_list)
+        closed_list.append(current)
+        pt = current.pt
+        if pt.x == dest.x and pt.y == dest.y:
             return reconstruct_path(arr, current, came_from)
+
+        neighbor = []
+
         for i in range(4):
-            row = current[0].x + dx[i]
-            col = current[0].y + dy[i]
-            if isValid(arr, dim, row, col) and arr[row][col] != 'X':
-                neighbor = Point(row, col)
-                tent_g_value = g_values[current[0] ] + 1
-                #print("Tentative G value:")
-                #print(tent_g_value)
-                #print("G_values neighbour value:")
-                #print(g_values.get(neighbor, 0))
-                if neighbor in closed_set and tent_g_value >= g_values.get(neighbor, 0):
+            row = pt.x + dx[i]
+            col = pt.y + dy[i]
+            if isValid(arr, dim, row, col) and arr[row][col] != 'X' and (not visited[row][col]):
+                new_node = AstarNode(row, col)
+                neighbor = Point(row,col)
+                # print(new_node.__str__())
+                tent_g = current.g + 1
+                if new_node in closed_list and tent_g >= new_node.g:
                     continue
-                if tent_g_value < g_values.get(neighbor, 0) or not neighbor in pq:
+                if tent_g < new_node.g or new_node not in open_list:
                     came_from[neighbor] = current
-                    g_values[neighbor] = tent_g_value
-                    f_values[neighbor] = tent_g_value + heuristic(neighbor, dest)
-                    # heapq.heappush(pq, (f_values[neighbor], neighbor))
-                    pq.put(f_values[neighbor], neighbor)
-            if current[0] != src:
-               closed_set.add(current)
-    print("A-star failed")
+                    new_node.g = tent_g
+                    new_node.f = tent_g + heuristic(neighbor, dest)
+                    new_node.pt = Point(row, col) #will this addition fix the bug?
+                    open_list.append(new_node)
+                    heapq.heappush(open_list, new_node)
+
+        #if current != src:
+            #closed_list.add(current)
+
+    print("Astar failed")
     return arr
-# 0.1 -0.3 run the algo on 50 diff mazezs. how many of you were able to find the path divided by total
-# generate 50 mazes with a one probability. total no times you found the path/ total no of times you ran the alfo.
