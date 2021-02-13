@@ -38,13 +38,10 @@ def isValid(arr, dim, row, col):
         return True
 
 
-def reconstruct_path(arr, came_from, current):
-    while current in came_from:
-        print(came_from)
-        current = came_from[current]
-        i = current.x
-        j = current.y
-        arr[i][j] = "V"
+def reconstruct_path(arr, dim, came_from):
+    for i in came_from:
+        if (i.x != 0 and i.x != 0) or (i.x != dim and i.x != dim):
+            arr[i.x][i.y] = "V"
     return arr
 
 
@@ -84,7 +81,7 @@ def astar(arr, dim):
         pt = current.pt
         if pt.x == dest.x and pt.y == dest.y:
             print("\nA* distance: " + str(current.dist))
-            return reconstruct_path(arr, came_from, current)
+            return reconstruct_path(arr, dim, came_from)
 
         neighbor = []
 
