@@ -108,3 +108,56 @@ def astar(arr, dim):
 
     print("Astar failed")
     return arr
+
+
+def auto_astar(arr, dim):
+    dx = [-1, 0, 0, 1]
+    dy = [0, -1, 1, 0]
+
+    src = Point(0, 0)
+    dest = Point(dim - 1, dim - 1)
+
+    visited = [[False for i in range(dim)] for j in range(dim)]
+    visited[0][0] = True
+
+    src.g = src.h = src.f = 0
+
+    open_list = []
+    closed_list = []
+    came_from = {}
+    s = AstarNode(src, 0)
+    heapq.heapify(open_list)
+    heapq.heappush(open_list, s)
+
+    while len(open_list) > 0:
+        current = heapq.heappop(open_list)
+        closed_list.append(current)
+        pt = current.pt
+        if pt.x == dest.x and pt.y == dest.y:
+            return current.dist
+
+        neighbor = []
+
+        for i in range(4):
+            row = pt.x + dx[i]
+            col = pt.y + dy[i]
+            if isValid(arr, dim, row, col) and arr[row][col] != 'X' and (not visited[row][col]):
+                new_node = AstarNode(row, col)
+                neighbor = Point(row,col)
+                # print(new_node.__str__())
+                tent_g = current.g + 1
+                if new_node in closed_list and tent_g >= new_node.g:
+                    continue
+                if tent_g < new_node.g or new_node not in open_list:
+                    came_from[neighbor] = current
+                    new_node.g = tent_g
+                    new_node.f = tent_g + heuristic(neighbor, dest)
+                    new_node.pt = Point(row, col) #will this addition fix the bug?
+                    open_list.append(new_node)
+                    heapq.heappush(open_list, new_node)
+
+        #if current != src:
+            #closed_list.add(current)
+
+    print("Astar failed")
+    return -1

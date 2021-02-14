@@ -63,3 +63,39 @@ def bfs(arr, dim):
     # if failure
     print("BFS failed")
     return arr
+
+
+def auto_bfs(arr, dim):
+    dx = [-1, 0, 0, 1]
+    dy = [0, -1, 1, 0]
+
+    src = Point(0, 0)
+    dest = Point(dim - 1, dim - 1)
+
+    visited = [[False for i in range(dim)] for j in range(dim)]
+    visited[0][0] = True
+
+    queue = deque()  # quicker way to do queue operations
+    s = QueueNode(src, 0)
+    queue.append(s)
+
+    while queue:
+
+        current = queue.popleft()  # pop cell
+        pt = current.pt
+
+        if pt.x == dest.x and pt.y == dest.y:
+            return current.dist
+
+        for i in range(4):
+            row = pt.x + dx[i]
+            col = pt.y + dy[i]
+            # evaluate next line when row=1 and col=0
+            if isValid(arr, dim, row, col) and arr[row][col] != 'X' and (not visited[row][col]):
+                # if entry is valid, empty, and not visited
+                visited[row][col] = True
+                adjCell = QueueNode(Point(row, col), current.dist+1)
+                queue.append(adjCell)
+    # if failure
+    print("BFS failed")
+    return -1

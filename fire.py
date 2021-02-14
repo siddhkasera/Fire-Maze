@@ -86,7 +86,7 @@ def spreadFire(arr, dim, flammability):
     return copyArr
 
 
-def dfs(arr, dim):
+def help_dfs(arr, dim):
     dx = [-1, 0, 0, 1]
     dy = [0, -1, 1, 0]
     src = Point(0, 0)
@@ -129,7 +129,7 @@ def strategy1(arr, dim, flammability):
     s = StackNode(src, 0)
     stack.append(s)
 
-    if dfs(arr, dim) == False:
+    if help_dfs(arr, dim) == False:
         print("No path from start to goal")
         return False
 
@@ -173,7 +173,7 @@ def strategy2(arr, dim, flammability):
     s = StackNode(src, 0)
     stack.append(s)
 
-    if dfs(arr, dim) == False:
+    if help_dfs(arr, dim) == False:
         print("No path from start to goal")
         return False
 

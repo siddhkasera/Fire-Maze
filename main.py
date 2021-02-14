@@ -73,7 +73,7 @@ else:
             if m == "1" or m == "Strategy 1":
                 f = input("Enter a flammability value from a range of 0 to 1: ")
                 arr = generate_array(int(dim), float(p))
-                display_array(arr, int(dim))
+                #display_array(arr, int(dim))
                 t0 = time.time()
                 if strategy1(arr, int(dim), float(f)):
                     print(time.time() - t0, "seconds")
@@ -81,7 +81,7 @@ else:
             elif m == "2" or m == "Strategy 2":
                 f = input("Enter a flammability value from a range of 0 to 1: ")
                 arr = generate_array(int(dim), float(p))
-                display_array(arr, int(dim))
+                #display_array(arr, int(dim))
                 t0 = time.time()
                 if strategy2(arr, int(dim), float(f)):
                     print(time.time() - t0, "seconds")
