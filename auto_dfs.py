@@ -1,13 +1,10 @@
-from collections import deque
-
-
 class Point:
     def __init__(self, x: int, y: int):
         self.x = x
         self.y = y
 
 
-class QueueNode:
+class StackNode:
     def __init__(self, pt: Point, dist: int):
         self.pt = pt
         self.dist = dist
@@ -28,29 +25,23 @@ def fillInVisited(arr, dim, visited):
     return arr
 
 
-def bfs(arr, dim):
+def auto_dfs(arr, dim):
     dx = [-1, 0, 0, 1]
     dy = [0, -1, 1, 0]
-
     src = Point(0, 0)
     dest = Point(dim - 1, dim - 1)
 
     visited = [[False for i in range(dim)] for j in range(dim)]
     visited[0][0] = True
+    stack = []
+    s = StackNode(src, 0)
+    stack.append(s)
 
-    queue = deque()  # quicker way to do queue operations
-    s = QueueNode(src, 0)
-    queue.append(s)
-
-    while queue:
-
-        current = queue.popleft()  # pop cell
+    while stack:
+        current = stack.pop(len(stack)-1)
         pt = current.pt
-
         if pt.x == dest.x and pt.y == dest.y:
-            print("BFS distance: " + str(current.dist) )
-            return fillInVisited(arr, dim, visited)
-
+            return current.dist
         for i in range(4):
             row = pt.x + dx[i]
             col = pt.y + dy[i]
@@ -58,8 +49,8 @@ def bfs(arr, dim):
             if isValid(arr, dim, row, col) and arr[row][col] != 'X' and (not visited[row][col]):
                 # if entry is valid, empty, and not visited
                 visited[row][col] = True
-                adjCell = QueueNode(Point(row, col), current.dist+1)
-                queue.append(adjCell)
-    # if failure
-    print("BFS failed")
-    return arr
+                adjCell = StackNode(Point(row, col), current.dist+1)
+                stack.append(adjCell)
+
+    print("DFS failed")
+    return -1

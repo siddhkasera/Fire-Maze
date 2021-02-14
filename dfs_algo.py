@@ -41,7 +41,7 @@ def dfs(arr, dim):
         current = stack.pop(len(stack)-1)
         pt = current.pt
         if pt.x == dest.x and pt.y == dest.y:
-            print("\nDFS distance: " + str(current.dist) )
+            print("DFS distance: " + str(current.dist) )
             return fillInVisited(arr, dim, visited)
         for i in range(4):
             row = pt.x + dx[i]

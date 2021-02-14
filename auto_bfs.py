@@ -28,7 +28,7 @@ def fillInVisited(arr, dim, visited):
     return arr
 
 
-def bfs(arr, dim):
+def auto_bfs(arr, dim):
     dx = [-1, 0, 0, 1]
     dy = [0, -1, 1, 0]
 
@@ -48,8 +48,7 @@ def bfs(arr, dim):
         pt = current.pt
 
         if pt.x == dest.x and pt.y == dest.y:
-            print("BFS distance: " + str(current.dist) )
-            return fillInVisited(arr, dim, visited)
+            return current.dist
 
         for i in range(4):
             row = pt.x + dx[i]
@@ -62,4 +61,4 @@ def bfs(arr, dim):
                 queue.append(adjCell)
     # if failure
     print("BFS failed")
-    return arr
+    return -1

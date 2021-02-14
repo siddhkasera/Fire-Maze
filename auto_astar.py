@@ -56,7 +56,7 @@ def heuristic(a, b):
     return z
 
 
-def astar(arr, dim):
+def auto_astar(arr, dim):
     dx = [-1, 0, 0, 1]
     dy = [0, -1, 1, 0]
 
@@ -80,8 +80,7 @@ def astar(arr, dim):
         closed_list.append(current)
         pt = current.pt
         if pt.x == dest.x and pt.y == dest.y:
-            print("A* distance: " + str(current.dist))
-            return reconstruct_path(arr, dim, came_from)
+            return current.dist
 
         neighbor = []
 
@@ -107,4 +106,4 @@ def astar(arr, dim):
             #closed_list.add(current)
 
     print("Astar failed")
-    return arr
+    return -1
