@@ -104,14 +104,20 @@ def automate_test():
         for i in range(int(num_attempts)):
             print("\nAttempt ", i)
             if m == "1" or m == "Strategy 1":
-                arr = generate_array(int(dim), float(p))
+                while True:
+                    arr = generate_array(int(dim), float(p))
+                    if help_dfs(arr, int(dim)) == True:
+                        break
                 t0 = time.time()
                 if strategy1(arr, int(dim), float(flame)):
                     print(time.time() - t0, "seconds")
                     num_success = num_success+1
 
             elif m == "2" or m == "Strategy 2":
-                arr = generate_array(int(dim), float(p))
+                while True:
+                    arr = generate_array(int(dim), float(p))
+                    if help_dfs(arr, int(dim)) == True:
+                        break
                 t0 = time.time()
                 if strategy2(arr, int(dim), float(flame)):
                     print(time.time() - t0, "seconds")
