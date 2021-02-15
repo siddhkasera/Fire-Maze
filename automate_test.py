@@ -22,6 +22,8 @@ def automate_test():
         file_name = input(
             "Input the name of the file you want to store the output: ")
 
+        print("Performing calculations...")
+
         num_success = 0
         total_time = 0
         total_dist = 0
@@ -89,6 +91,8 @@ def automate_test():
         num_attempts = input("How many attempts? ")
         file_name = input(
             "Input the name of the file you want to store the output: ")
+
+        print("Performing calculations...")
         orig_stdout = sys.stdout
         f = open(file_name, "w")
         sys.stdout = f
@@ -120,6 +124,16 @@ def automate_test():
                         break
                 t0 = time.time()
                 if strategy2(arr, int(dim), float(flame)):
+                    print(time.time() - t0, "seconds")
+                    num_success = num_success+1
+
+            elif m == "3" or m == "Strategy 3":
+                while True:
+                    arr = generate_array(int(dim), float(p))
+                    if help_dfs(arr, int(dim)) == True:
+                        break
+                t0 = time.time()
+                if strategy3(arr, int(dim), float(flame)):
                     print(time.time() - t0, "seconds")
                     num_success = num_success+1
 

@@ -1,5 +1,5 @@
 from automate_test import automate_test
-from display_array import display_array
+#from display_array import display_array
 from generate_array import generate_array
 from bfs_algo import *
 from dfs_algo import *
@@ -9,7 +9,7 @@ import time
 
 #Rule of thumb: BFS uses the queue and DFS uses the stack. The code is otherwise the same
 auto = input("Select if you want to automate a lot of test cases: Y/N: ")
-if auto == "Y":
+if auto == "Y" or auto == "y" or auto == "yes" or auto == "automate":
     automate_test()
 
 else:
@@ -84,6 +84,14 @@ else:
                 #display_array(arr, int(dim))
                 t0 = time.time()
                 if strategy2(arr, int(dim), float(f)):
+                    print(time.time() - t0, "seconds")
+
+            elif m == "3" or m == "Strategy 3":
+                f = input("Enter a flammability value from a range of 0 to 1: ")
+                arr = generate_array(int(dim), float(p))
+                #display_array(arr, int(dim))
+                t0 = time.time()
+                if strategy3(arr, int(dim), float(f)):
                     print(time.time() - t0, "seconds")
 
             elif m == "exit" or m == "quit" or m == "stop":
