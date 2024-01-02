@@ -2,10 +2,14 @@ Implemented DFS and BFS algorithms using Stacks and Queues to solve the static m
 
 
 Plot for DFS
+
+
 ![dfs](https://github.com/siddhkasera/Fire-Maze/assets/58352099/9483ef5a-1079-4859-b37d-339f6002e3ed)
 
 
 Plot for BFS
+
+
 ![BFS](https://github.com/siddhkasera/Fire-Maze/assets/58352099/80a00548-4fa6-42eb-837d-522af2f1a75c)
 
 
@@ -31,14 +35,20 @@ As the flammability increases the average success rate decreases gradually for a
 They are different in the average time it takes for each strategy to find a path from start to goal. Strategy 3 takes the longest since there are more computations involved with each step compared to strategy 2 and strategy 1 where it only checks for a cell with fire and is not concerned with the future state of fire.
 
 Plot for Strategy 1 (the agent does not check updates for fire):
+
+
 ![fire1_1](https://github.com/siddhkasera/Fire-Maze/assets/58352099/10712081-bebc-450a-a83e-32cf3f64183c)
 
 
 Plot for Strategy 2 (will now check for fire):
+
+
 ![fire2_2](https://github.com/siddhkasera/Fire-Maze/assets/58352099/03c4718a-6611-4c56-8055-cb62c0ffb4bd)
 
 
 Plot for Strategy 3 (our strategy):
+
+
 ![strategy3](https://github.com/siddhkasera/Fire-Maze/assets/58352099/8a22b7e6-8850-4377-a7b8-90bea1d6ec79)
 
 The drawback of strategy 3 is that if we increase the alpha the agent can corner itself to a wall failing to solve the maze. So if we had unlimited computational resources we would introduce beta to our original heuristic formula. The beta will represent how much the agent prioritizes distance from the wall. The value of beta should balance the value chosen for alpha to make the agent less greedy. The new formula will be: 
